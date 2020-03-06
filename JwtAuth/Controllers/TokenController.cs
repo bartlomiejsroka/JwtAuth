@@ -21,14 +21,14 @@ namespace JwtAuth.Controllers
            HttpResponseMessage response = new HttpResponseMessage();
             if (CheckUser(user))
             {
-                 response.Content = new StringContent(JwtManager.GenerateToken(user.UserName), Encoding.Unicode);
-
+                 response.Content = new StringContent(JwtManager.GenerateToken(user.username), Encoding.Unicode);
+                
                 //return JwtManager.GenerateToken(user.UserName);
                 return response;
             }
             response.Content = new StringContent("Wrong username/password", Encoding.Unicode);
+            response.StatusCode = HttpStatusCode.Unauthorized;
             return response;
-           // return "Wrong username/password";
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace JwtAuth.Controllers
         {
             using (UsersDbEntities dc = new UsersDbEntities())
             {
-                _usersList = dc.users.OrderBy(a => a.UserName).ToList();
+                _usersList = dc.users.OrderBy(a => a.username).ToList();
                 HttpResponseMessage response;
                 response = Request.CreateResponse(HttpStatusCode.OK, _usersList);
                 return response;
@@ -46,7 +46,7 @@ namespace JwtAuth.Controllers
         private bool CheckUser(users users)
         {
             Get();
-            if (users != null && _usersList.Where(x=>x.UserName.Equals(users.UserName) && x.Password.Equals(users.Password)).FirstOrDefault() !=null )
+            if (users != null && _usersList.Where(x=>x.username.Equals(users.username) && x.password.Equals(users.password)).FirstOrDefault() !=null )
                 return true;
             else
                 return false;

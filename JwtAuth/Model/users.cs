@@ -11,11 +11,14 @@ namespace JwtAuth.Model
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class users
     {
-        public int Id { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        public int user_id { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
     }
 }
